@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="assets/banner.svg" alt="Claude Code RTL: Persian and Arabic text before and after the plugin" width="100%">
+  <img src="assets/banner.svg" alt="Claude Code RTL: Persian, Arabic and Hebrew text before and after the plugin" width="100%">
 </p>
 
 <h1 align="center">Claude Code RTL</h1>
 
 <p align="center">
   <b>Right-to-left (RTL) support for Claude Code.</b><br>
-  Persian (Farsi) and Arabic finally read in the right order, even when mixed with English, code, file names and numbers.
+  Persian (Farsi), Arabic and Hebrew finally read in the right order, even when mixed with English, code, file names and numbers.
 </p>
 
 <p align="center">
@@ -37,7 +37,7 @@ All the words are there, but you end up reading them in pieces. **Claude Code RT
 
 ## Features
 
-- 🌍 **Persian (Farsi) and Arabic**, plus other languages written in the Arabic script: Urdu, Kurdish (Sorani), Pashto and more
+- 🌍 **Persian (Farsi), Arabic and Hebrew**, plus other languages in those scripts: Urdu, Kurdish (Sorani), Pashto and more
 - 🔀 **Mixed text done right**: English words, code, file names, numbers and URLs stay where they belong
 - 📝 **Markdown-aware**: headings, lists, checklists, quotes and table cells; code blocks are never touched
 - 💬 **Both sides of the chat**: Claude's replies and your prompts
@@ -112,8 +112,8 @@ flowchart LR
   D --> E
 ```
 
-1. Before a message is drawn, the plugin looks at each line. A line with Persian or Arabic letters is right-to-left when its first or last letter is RTL, when at least half its words are RTL, or when it uses Persian/Arabic digits or punctuation (`۱۲۳`, `،`, `؟`). So a sentence like "PR ۱: merge شد" counts too, even though it opens in English. Code spans, URLs and link targets don't count.
-2. For an RTL line it inserts one invisible Unicode character, **RIGHT-TO-LEFT ISOLATE (U+2067)**, just after any markdown markers (`#`, `-`, `1.`, `>`, `[x]`).
+1. Before a message is drawn, the plugin looks at each line. A line with Persian, Arabic or Hebrew letters is right-to-left when its first or last letter is RTL, when at least half its words are RTL, or when it uses Persian/Arabic digits or punctuation (`۱۲۳`, `،`, `؟`). So a sentence like "PR ۱: merge شد" counts too, even though it opens in English. Code spans, URLs and link targets don't count.
+2. For an RTL line it inserts one invisible Unicode character, **RIGHT-TO-LEFT ISOLATE (U+2067)**, just after any markdown markers (`#`, `-`, `1.`, `>`, `[x]`). After a colon or Persian comma that ends an English word it adds a **RIGHT-TO-LEFT MARK (U+200F)**, so "PR ۱:" and "merge" stay two separate pieces instead of fusing into one English run.
 3. The renderer then orders that paragraph right-to-left, so punctuation, English words and numbers land where a reader expects.
 
 Fenced code blocks are skipped, and lines that already start with a bidi mark are left as written. The source is short and readable: [`hooks/bidi.ts`](https://github.com/smhosseini72/claude-code-rtl/blob/main/hooks/bidi.ts) and [`hooks/register.ts`](https://github.com/smhosseini72/claude-code-rtl/blob/main/hooks/register.ts).
@@ -182,7 +182,7 @@ Contributions are welcome, especially examples of text that still renders wrong.
 ## ⭐ Support the project
 
 If Claude Code RTL made Claude readable in your language, **please give the repo a star** ⭐.
-It takes one click and helps other Persian and Arabic speakers find it. Sharing it with a friend or on social media helps too.
+It takes one click and helps other Persian, Arabic and Hebrew speakers find it. Sharing it with a friend or on social media helps too.
 
 <p align="center">
   <a href="https://star-history.com/#smhosseini72/claude-code-rtl&Date">
@@ -196,4 +196,4 @@ It takes one click and helps other Persian and Arabic speakers find it. Sharing 
 
 ---
 
-<sub><b>Keywords:</b> Claude Code RTL · Claude Code right-to-left · Claude Code Persian · Claude Code Farsi · Claude Code Arabic · Claude desktop RTL · bidi · bidirectional text · Claude Code plugin · Claude Code mod · راست‌به‌چپ کلاد کد · کلاد کد فارسی · Claude Code بالعربية</sub>
+<sub><b>Keywords:</b> Claude Code RTL · Claude Code right-to-left · Claude Code Persian · Claude Code Farsi · Claude Code Arabic · Claude Code Hebrew · Claude desktop RTL · bidi · bidirectional text · Claude Code plugin · Claude Code mod · راست‌به‌چپ کلاد کد · کلاد کد فارسی · Claude Code بالعربية · Claude Code בעברית</sub>

@@ -1,15 +1,16 @@
 // Marks right-to-left lines of markdown with a Unicode isolate (RLI, U+2067).
 // A renderer that lays every block out left-to-right then still orders the
-// words, punctuation and embedded English of a Persian or Arabic paragraph
-// the way a reader expects. What the text says is unchanged.
+// words, punctuation and embedded English of a Persian, Arabic or Hebrew
+// paragraph the way a reader expects. What the text says is unchanged.
 
 import type { Direction } from '../types'
 
 const RLI = '\u2067'
 const PDI = '\u2069'
+const RLM = '\u200F'
 
 const RTL_LETTER =
-  /[\u0620-\u064A\u066E-\u06D5\u06EE\u06EF\u06FA-\u06FF\u0700-\u08FF\uFB50-\uFDFF\uFE70-\uFEFC]/
+  /[\u05D0-\u05F2\u0620-\u064A\u066E-\u06D5\u06EE\u06EF\u06FA-\u06FF\u0700-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFC]/
 const LTR_LETTER = /[A-Za-z\u00C0-\u024F\u0370-\u03FF\u0400-\u04FF]/
 
 // A line that already opens with an explicit bidi mark is left as written.
@@ -21,6 +22,14 @@ const RTL_SIGN = /[\u060C\u061B\u061F\u0660-\u0669\u06F0-\u06F9]/
 // What a reader does not read as words of the sentence: code spans, link
 // targets, bare URLs and HTML tags.
 const NOT_PROSE = /`[^`]*`|\]\([^)]*\)|https?:\/\/\S+|<[^>]+>/g
+
+// A colon or Arabic comma right after an English word or a digit joins it to
+// the English after it ("PR ۱: merge شد" draws as "شد PR ۱: merge"); an RLM
+// after it keeps them apart. It goes before a closing ** or _ so emphasis
+// still closes.
+const JOINING_PUNCTUATION =
+  /(?<=[A-Za-z0-9\u00C0-\u024F\u0370-\u03FF\u0400-\u04FF\u0660-\u0669\u06F0-\u06F9])([:\u060C\u061B])(?=(?:\*{1,2}|_{1,2})?\s)/g
+const CODE_SPAN = /(`[^`]*`)/
 
 const FENCE = /^[ \t]*(`{3,}|~{3,})/
 const QUOTE = /^[ \t]*>[ \t]?/
@@ -96,14 +105,26 @@ function splitPrefix(line: string): [string, string] {
   }
 }
 
+/**
+ * Puts an RLM after each colon or Arabic comma that ends an English word or a
+ * number, outside code spans (the split leaves them at odd indexes).
+ */
+function separateRuns(text: string): string {
+  return text
+    .split(CODE_SPAN)
+    .map((part, at) => (at % 2 === 1 ? part : part.replace(JOINING_PUNCTUATION, `$1${RLM}`)))
+    .join('')
+}
+
 function mark(text: string, isClosed: boolean): string {
   if (BIDI_MARK.test(text) || !isRtl(text)) {
     return text
   }
 
   const body = text.trimEnd()
+  const tail = text.slice(body.length)
 
-  return isClosed ? RLI + body + PDI + text.slice(body.length) : RLI + text
+  return RLI + separateRuns(body) + (isClosed ? PDI : '') + tail
 }
 
 function markLines(text: string, isClosed: boolean): string {

@@ -1,8 +1,8 @@
 # GitHub Pages site for the project (https://smhosseini72.github.io/claude-code-rtl/)
 title: Claude Code RTL
 description: >-
-  Right-to-left (RTL) support for Claude Code. Persian (Farsi) and Arabic
-  text in the right order, even mixed with English, code and numbers.
+  Right-to-left (RTL) support for Claude Code. Persian (Farsi), Arabic and
+  Hebrew text in the right order, even mixed with English, code and numbers.
 url: https://smhosseini72.github.io
 baseurl: /claude-code-rtl
 lang: en

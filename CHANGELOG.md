@@ -4,6 +4,20 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.1.3] - 2026-10-17
+
+### Added
+
+- Hebrew is supported again, alongside Persian (Farsi), Arabic and the other
+  Arabic-script languages.
+
+### Fixed
+
+- A colon or Persian comma after an English word or a number no longer fuses
+  the English on both sides into one run: "PR ۱: merge شد" used to draw as
+  "شد PR ۱: merge". An invisible right-to-left mark (U+200F) after the
+  punctuation keeps the pieces apart. Code spans, times and URLs are untouched.
+
 ## [0.1.2] - 2026-10-17
 
 ### Fixed
@@ -26,7 +40,7 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
-- Right-to-left display of Persian (Farsi) and Arabic paragraphs in
+- Right-to-left display of Persian (Farsi), Arabic and Hebrew paragraphs in
   Claude's replies and in your own prompts, using a Unicode isolate (U+2067).
 - Markdown-aware marking: headings, lists, checklists, quotes and table cells;
   fenced code blocks are never changed.
@@ -35,6 +49,7 @@ All notable changes to this project are documented here. The format follows
 - `/rtl`, `/rtl on` and `/rtl off` to toggle the display; the choice is kept
   across sessions.
 
+[0.1.3]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.3
 [0.1.2]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.2
 [0.1.1]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.1
 [0.1.0]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.0

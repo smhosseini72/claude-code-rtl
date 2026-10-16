@@ -4,6 +4,7 @@ import { isRtl, markRtlMarkdown, markRtlPlain } from '../hooks/bidi'
 
 const RLI = '\u2067'
 const PDI = '\u2069'
+const RLM = '\u200F'
 
 describe('isRtl', () => {
   test('reads a line by its first or last letter', () => {
@@ -13,6 +14,7 @@ describe('isRtl', () => {
     expect(isRtl('**PR ۱:** merge شد.')).toBe(true)
     expect(isRtl('PR 1: merge شد')).toBe(true)
     expect(isRtl('یہ اردو ہے')).toBe(true)
+    expect(isRtl('שלום עולם')).toBe(true)
   })
 
   test('reads a line that opens and closes in English by its words', () => {
@@ -56,6 +58,21 @@ describe('markRtlMarkdown', () => {
   test('closes the isolate in each table cell', () => {
     expect(markRtlMarkdown('| نام | name |')).toBe(`| ${RLI}نام${PDI} | name |`)
     expect(markRtlMarkdown('|---|---|')).toBe('|---|---|')
+  })
+})
+
+describe('markRtlMarkdown around colons and commas', () => {
+  test('keeps an English label apart from the English word after it', () => {
+    expect(markRtlMarkdown('- **PR ۱:** merge شد.')).toBe(`- ${RLI}**PR ۱:${RLM}** merge شد.`)
+    expect(markRtlMarkdown('PR ۱: merge شد')).toBe(`${RLI}PR ۱:${RLM} merge شد`)
+    expect(markRtlMarkdown('TypeScript، JavaScript و Python')).toBe(`${RLI}TypeScript،${RLM} JavaScript و Python`)
+  })
+
+  test('leaves code, times, URLs and English lines alone', () => {
+    expect(markRtlMarkdown('دستور `a: b` رو بزن')).toBe(`${RLI}دستور \`a: b\` رو بزن`)
+    expect(markRtlMarkdown('ساعت 10:30 شروع میشه')).toBe(`${RLI}ساعت 10:30 شروع میشه`)
+    expect(markRtlMarkdown('لینک https://example.com رو باز کن')).toBe(`${RLI}لینک https://example.com رو باز کن`)
+    expect(markRtlMarkdown('Note: hello world')).toBe('Note: hello world')
   })
 })
 

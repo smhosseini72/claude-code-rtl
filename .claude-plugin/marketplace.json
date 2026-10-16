@@ -1,14 +1,14 @@
 {
   "name": "claude-code-rtl",
   "owner": { "name": "mahdi", "url": "https://github.com/smhosseini72" },
-  "description": "Right-to-left (RTL) support for Claude Code: Persian (Farsi) and Arabic",
+  "description": "Right-to-left (RTL) support for Claude Code: Persian (Farsi), Arabic and Hebrew",
   "plugins": [
     {
       "name": "rtl-text",
       "source": "./",
-      "description": "Shows Persian and Arabic paragraphs right-to-left in the Claude Code transcript",
+      "description": "Shows Persian, Arabic and Hebrew paragraphs right-to-left in the Claude Code transcript",
       "category": "productivity",
-      "keywords": ["rtl", "persian", "farsi", "arabic", "urdu", "bidi"]
+      "keywords": ["rtl", "persian", "farsi", "arabic", "hebrew", "urdu", "bidi"]
     }
   ]
 }
