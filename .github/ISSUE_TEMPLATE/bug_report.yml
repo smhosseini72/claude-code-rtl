@@ -1,0 +1,51 @@
+name: Text still looks wrong
+description: Report Persian, Arabic or Hebrew text that is not shown in the right order
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report! A copy of the exact text helps the most.
+        گزارش به فارسی هم کاملاً اوکیه.
+  - type: textarea
+    id: text
+    attributes:
+      label: The text
+      description: Paste the exact text (copy it, so invisible characters survive).
+      render: markdown
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: Drag a screenshot here showing how it looks.
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where did you see it?
+      options:
+        - Claude desktop app (Code tab)
+        - VS Code extension
+        - Terminal
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Claude Code version
+      description: Output of `claude --version`
+      placeholder: 2.1.295
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS
+        - Windows
+        - Linux
+    validations:
+      required: true

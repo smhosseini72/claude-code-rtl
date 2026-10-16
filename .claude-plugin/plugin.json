@@ -1,0 +1,11 @@
+{
+  "name": "rtl-text",
+  "version": "0.1.0",
+  "description": "Right-to-left (RTL) text for Claude Code: shows Persian (Farsi), Arabic and Hebrew paragraphs in the right order, with mixed English, numbers and punctuation where they belong",
+  "author": { "name": "mahdi", "url": "https://github.com/smhosseini72" },
+  "homepage": "https://github.com/smhosseini72/claude-code-rtl",
+  "repository": "https://github.com/smhosseini72/claude-code-rtl",
+  "license": "MIT",
+  "keywords": ["rtl", "right-to-left", "bidi", "persian", "farsi", "arabic", "hebrew", "unicode", "i18n"],
+  "types": "./types/index.d.ts"
+}
