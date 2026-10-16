@@ -17,9 +17,11 @@
   <a href="https://github.com/smhosseini72/claude-code-rtl/stargazers"><img src="https://img.shields.io/github/stars/smhosseini72/claude-code-rtl?style=social" alt="GitHub stars"></a>
 </p>
 
-<p align="center">
-  <a href="README.md">English</a> · <b>فارسی</b>
-</p>
+<div align="center">
+
+[English](README.md) · **فارسی**
+
+</div>
 
 ---
 
