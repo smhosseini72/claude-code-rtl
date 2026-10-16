@@ -1,5 +1,5 @@
 name: Text still looks wrong
-description: Report Persian, Arabic or Hebrew text that is not shown in the right order
+description: Report Persian or Arabic text that is not shown in the right order
 labels: [bug]
 body:
   - type: markdown

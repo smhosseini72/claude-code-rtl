@@ -4,11 +4,20 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.1.1] - 2026-10-17
+
+### Changed
+
+- Detection now covers the Arabic script only: Persian (Farsi), Arabic, Urdu,
+  Kurdish (Sorani), Pashto and other languages written in it.
+- The source keeps its invisible bidi characters as `\u` escapes, so the code
+  shows no hidden-character warnings on GitHub.
+
 ## [0.1.0] - 2026-10-16
 
 ### Added
 
-- Right-to-left display of Persian (Farsi), Arabic and Hebrew paragraphs in
+- Right-to-left display of Persian (Farsi) and Arabic paragraphs in
   Claude's replies and in your own prompts, using a Unicode isolate (U+2067).
 - Markdown-aware marking: headings, lists, checklists, quotes and table cells;
   fenced code blocks are never changed.
@@ -17,4 +26,5 @@ All notable changes to this project are documented here. The format follows
 - `/rtl`, `/rtl on` and `/rtl off` to toggle the display; the choice is kept
   across sessions.
 
+[0.1.1]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.1
 [0.1.0]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.0

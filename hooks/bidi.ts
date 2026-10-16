@@ -1,17 +1,17 @@
 // Marks right-to-left lines of markdown with a Unicode isolate (RLI, U+2067).
 // A renderer that lays every block out left-to-right then still orders the
-// words, punctuation and embedded English of a Persian, Arabic or Hebrew
-// paragraph the way a reader expects. What the text says is unchanged.
+// words, punctuation and embedded English of a Persian or Arabic paragraph
+// the way a reader expects. What the text says is unchanged.
 
-const RLI = '⁧'
-const PDI = '⁩'
+const RLI = '\u2067'
+const PDI = '\u2069'
 
 const RTL_LETTER =
-  /[א-ײؠ-يٮ-ەۮۯۺ-ۿ܀-ࣿיִ-﷿ﹰ-ﻼ]/
-const LTR_LETTER = /[A-Za-zÀ-ɏͰ-ϿЀ-ӿ]/
+  /[\u0620-\u064A\u066E-\u06D5\u06EE\u06EF\u06FA-\u06FF\u0700-\u08FF\uFB50-\uFDFF\uFE70-\uFEFC]/
+const LTR_LETTER = /[A-Za-z\u00C0-\u024F\u0370-\u03FF\u0400-\u04FF]/
 
 // A line that already opens with an explicit bidi mark is left as written.
-const BIDI_MARK = /^[‎‏؜‪-‮⁦-⁩]/
+const BIDI_MARK = /^[\u200E\u200F\u061C\u202A-\u202E\u2066-\u2069]/
 
 // What a reader does not read as words of the sentence: code spans, link
 // targets, bare URLs and HTML tags.

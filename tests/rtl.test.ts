@@ -2,8 +2,8 @@ import { describe, expect, test } from 'claude-code/testing'
 
 import { isRtl, markRtlMarkdown, markRtlPlain } from '../hooks/bidi'
 
-const RLI = '⁧'
-const PDI = '⁩'
+const RLI = '\u2067'
+const PDI = '\u2069'
 
 describe('isRtl', () => {
   test('reads a line by its first letter or its majority', () => {
@@ -11,7 +11,7 @@ describe('isRtl', () => {
     expect(isRtl('برای Claude Code Desktop App')).toBe(true)
     expect(isRtl('Claude Code سیستم افزونه داره')).toBe(true)
     expect(isRtl('Fix the bug in فایل')).toBe(false)
-    expect(isRtl('שלום עולם')).toBe(true)
+    expect(isRtl('یہ اردو ہے')).toBe(true)
     expect(isRtl('---')).toBe(false)
   })
 
