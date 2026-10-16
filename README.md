@@ -112,7 +112,7 @@ flowchart LR
   D --> E
 ```
 
-1. Before a message is drawn, the plugin looks at each line. A line is right-to-left when its first letter is RTL, or when it has at least as many RTL letters as Latin ones. Code spans, URLs and link targets don't count.
+1. Before a message is drawn, the plugin looks at each line. A line with Persian or Arabic letters is right-to-left when its first or last letter is RTL, when at least half its words are RTL, or when it uses Persian/Arabic digits or punctuation (`۱۲۳`, `،`, `؟`). So a sentence like "PR ۱: merge شد" counts too, even though it opens in English. Code spans, URLs and link targets don't count.
 2. For an RTL line it inserts one invisible Unicode character, **RIGHT-TO-LEFT ISOLATE (U+2067)**, just after any markdown markers (`#`, `-`, `1.`, `>`, `[x]`).
 3. The renderer then orders that paragraph right-to-left, so punctuation, English words and numbers land where a reader expects.
 

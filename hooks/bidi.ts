@@ -3,6 +3,8 @@
 // words, punctuation and embedded English of a Persian or Arabic paragraph
 // the way a reader expects. What the text says is unchanged.
 
+import type { Direction } from '../types'
+
 const RLI = '\u2067'
 const PDI = '\u2069'
 
@@ -12,6 +14,9 @@ const LTR_LETTER = /[A-Za-z\u00C0-\u024F\u0370-\u03FF\u0400-\u04FF]/
 
 // A line that already opens with an explicit bidi mark is left as written.
 const BIDI_MARK = /^[\u200E\u200F\u061C\u202A-\u202E\u2066-\u2069]/
+
+// Arabic-script punctuation and digits turn up only in RTL prose.
+const RTL_SIGN = /[\u060C\u061B\u061F\u0660-\u0669\u06F0-\u06F9]/
 
 // What a reader does not read as words of the sentence: code spans, link
 // targets, bare URLs and HTML tags.
@@ -25,27 +30,48 @@ const INDENT = /^[ \t]*/
 const TABLE_ROW = /^[ \t]*\|/
 const TABLE_CELL = /(\|[ \t]*)((?:\\\||`[^`]*`|[^|`])+)/g
 
+function directionOf(ch: string): Direction | undefined {
+  if (RTL_LETTER.test(ch)) {
+    return 'rtl'
+  }
+
+  return LTR_LETTER.test(ch) ? 'ltr' : undefined
+}
+
+function isDirection(dir: Direction | undefined): dir is Direction {
+  return dir !== undefined
+}
+
+function directionsOf(text: string): Direction[] {
+  return [...text].map(directionOf).filter(isDirection)
+}
+
 /**
- * Whether a line reads right-to-left: its first letter is RTL, or it has at
- * least as many RTL letters as Latin ones ("Claude Code سیستم افزونه داره").
+ * Whether a line reads right-to-left. Persian and Arabic sentences often open
+ * or close with an English word ("PR ۱: merge شد"), so once a line has RTL
+ * letters any one of these is enough: its first or last letter is RTL, at
+ * least half its words are RTL, or it uses Arabic-script digits or punctuation.
  */
 export function isRtl(text: string): boolean {
   const prose = text.replace(NOT_PROSE, ' ')
-  let rtl = 0
-  let ltr = 0
-  let first: 'rtl' | 'ltr' | undefined
+  const letters = directionsOf(prose)
 
-  for (const ch of prose) {
-    if (RTL_LETTER.test(ch)) {
-      rtl += 1
-      first = first ?? 'rtl'
-    } else if (LTR_LETTER.test(ch)) {
-      ltr += 1
-      first = first ?? 'ltr'
-    }
+  if (!letters.includes('rtl')) {
+    return false
   }
 
-  return rtl > 0 && (first === 'rtl' || rtl >= ltr)
+  const words = prose
+    .split(/\s+/)
+    .map(word => directionsOf(word)[0])
+    .filter(isDirection)
+  const rtlWords = words.filter(dir => dir === 'rtl').length
+
+  return (
+    letters[0] === 'rtl' ||
+    letters.at(-1) === 'rtl' ||
+    rtlWords * 2 >= words.length ||
+    RTL_SIGN.test(prose)
+  )
 }
 
 /**

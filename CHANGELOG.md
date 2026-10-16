@@ -4,6 +4,15 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.1.2] - 2026-10-17
+
+### Fixed
+
+- Persian and Arabic sentences that open with English words, such as
+  "PR ۱: merge شد", are now shown right-to-left. A line with RTL letters reads
+  right-to-left when its first or last letter is RTL, when at least half its
+  words are RTL, or when it uses Arabic-script digits or punctuation.
+
 ## [0.1.1] - 2026-10-17
 
 ### Changed
@@ -26,5 +35,6 @@ All notable changes to this project are documented here. The format follows
 - `/rtl`, `/rtl on` and `/rtl off` to toggle the display; the choice is kept
   across sessions.
 
+[0.1.2]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.2
 [0.1.1]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.1
 [0.1.0]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.0

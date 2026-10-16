@@ -6,13 +6,24 @@ const RLI = '\u2067'
 const PDI = '\u2069'
 
 describe('isRtl', () => {
-  test('reads a line by its first letter or its majority', () => {
+  test('reads a line by its first or last letter', () => {
     expect(isRtl('سلام دنیا')).toBe(true)
     expect(isRtl('برای Claude Code Desktop App')).toBe(true)
     expect(isRtl('Claude Code سیستم افزونه داره')).toBe(true)
-    expect(isRtl('Fix the bug in فایل')).toBe(false)
+    expect(isRtl('**PR ۱:** merge شد.')).toBe(true)
+    expect(isRtl('PR 1: merge شد')).toBe(true)
     expect(isRtl('یہ اردو ہے')).toBe(true)
+  })
+
+  test('reads a line that opens and closes in English by its words', () => {
+    expect(isRtl('TypeScript و JavaScript هر دو کار می‌کنن OK')).toBe(true)
+    expect(isRtl('Step ۳: run npm install و wait')).toBe(true)
+    expect(isRtl('Open فایل config.json in the editor')).toBe(false)
+  })
+
+  test('leaves lines with no RTL letters alone', () => {
     expect(isRtl('---')).toBe(false)
+    expect(isRtl('Hello, world')).toBe(false)
   })
 
   test('does not count code, link targets or URLs', () => {
