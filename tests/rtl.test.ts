@@ -6,6 +6,7 @@ const LRI = '\u2066'
 const RLI = '\u2067'
 const PDI = '\u2069'
 const RLM = '\u200F'
+const LRM = '\u200E'
 
 describe('isRtl', () => {
   test('reads a line by its first or last letter', () => {
@@ -99,6 +100,22 @@ describe('markRtlMarkdown around numbers', () => {
 
   test('keeps the full stop after a number outside the isolate', () => {
     expect(markRtlMarkdown('دما -5.')).toBe(`${RLI}دما ${LRI}-5${PDI}.`)
+  })
+})
+
+describe('markRtlMarkdown around C++ and C#', () => {
+  test('keeps + and # with the English word or number they end', () => {
+    expect(markRtlMarkdown('زبان‌های C++ و C# و Notepad++ رو هم داریم.')).toBe(
+      `${RLI}زبان‌های C++${LRM} و C#${LRM} و Notepad++${LRM} رو هم داریم.`,
+    )
+    expect(markRtlMarkdown('**C#** رو یاد بگیر')).toBe(`${RLI}**C#${LRM}** رو یاد بگیر`)
+    expect(markRtlMarkdown('سن بالای 18+ لازمه')).toBe(`${RLI}سن بالای 18+${LRM} لازمه`)
+  })
+
+  test('leaves formulas, hashtags and code alone', () => {
+    expect(markRtlMarkdown('فرمول a+b رو ببین')).toBe(`${RLI}فرمول a+b رو ببین`)
+    expect(markRtlMarkdown('#frontend رو دنبال کن')).toBe(`${RLI}#frontend رو دنبال کن`)
+    expect(markRtlMarkdown('کد `i++` رو ببین')).toBe(`${RLI}کد \`i++\` رو ببین`)
   })
 })
 

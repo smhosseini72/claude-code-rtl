@@ -4,6 +4,15 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.1.5] - 2026-10-17
+
+### Fixed
+
+- "C++", "C#", "Notepad++" and "18+" keep their `+` and `#` in RTL text; they
+  used to draw as "++C" and "#C". A left-to-right mark (U+200E) after the
+  symbols holds them to their word. Formulas like "a+b", hashtags and code
+  are left alone.
+
 ## [0.1.4] - 2026-10-17
 
 ### Fixed
@@ -61,6 +70,7 @@ All notable changes to this project are documented here. The format follows
 - `/rtl`, `/rtl on` and `/rtl off` to toggle the display; the choice is kept
   across sessions.
 
+[0.1.5]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.5
 [0.1.4]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.4
 [0.1.3]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.3
 [0.1.2]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.2

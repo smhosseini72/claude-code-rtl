@@ -9,6 +9,7 @@ const LRI = '\u2066'
 const RLI = '\u2067'
 const PDI = '\u2069'
 const RLM = '\u200F'
+const LRM = '\u200E'
 
 const RTL_LETTER =
   /[\u05D0-\u05F2\u0620-\u064A\u066E-\u06D5\u06EE\u06EF\u06FA-\u06FF\u0700-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFC]/
@@ -36,6 +37,12 @@ const JOINING_PUNCTUATION =
 // goes in a left-to-right isolate.
 const NUMBER_UNIT =
   /(?<=^|[\s(])(?:\+[0-9\u0660-\u0669\u06F0-\u06F9]{1,4}(?:[ -][0-9\u0660-\u0669\u06F0-\u06F9]{1,5})+|[0-9\u0660-\u0669\u06F0-\u06F9]{2,}(?: [0-9\u0660-\u0669\u06F0-\u06F9]{2,}){2,}|[-+\u2212][0-9\u0660-\u0669\u06F0-\u06F9]+(?:[.,\u066B][0-9\u0660-\u0669\u06F0-\u06F9]+)*%?)/g
+
+// + and # that end an English word or a number ("C++", "C#", "18+") are
+// neutral, so in RTL text they jump to the word's other side ("++C"); an LRM
+// after them keeps them with it. It goes before a closing ** or _ too.
+const TRAILING_SYMBOLS =
+  /(?<=[A-Za-z0-9])([+#]+)(?=[\s.,;:!?)\]*_'"\u00AB\u00BB\u060C\u061B\u061F]|$)/g
 
 // What a fix never reaches into: code spans, link targets and URLs.
 const PROTECTED = /(`[^`]*`|\]\([^)]*\)|https?:\/\/\S+)/
@@ -116,9 +123,10 @@ function splitPrefix(line: string): [string, string] {
 
 /**
  * Keeps English and number runs where a reader expects them: an RLM after a
- * colon or Arabic comma that ends an English word or a number, and signed or
- * phone numbers in a left-to-right isolate. Protected parts (code spans, link
- * targets, URLs) land at odd indexes of the split and are left alone.
+ * colon or Arabic comma that ends an English word or a number, an LRM after
+ * "C++"-style symbols, and signed or phone numbers in a left-to-right
+ * isolate. Protected parts (code spans, link targets, URLs) land at odd
+ * indexes of the split and are left alone.
  */
 function separateRuns(text: string): string {
   return text
@@ -128,6 +136,7 @@ function separateRuns(text: string): string {
         ? part
         : part
             .replace(JOINING_PUNCTUATION, `$1${RLM}`)
+            .replace(TRAILING_SYMBOLS, `$1${LRM}`)
             .replace(NUMBER_UNIT, number => LRI + number + PDI),
     )
     .join('')
