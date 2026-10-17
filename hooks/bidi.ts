@@ -5,6 +5,7 @@
 
 import type { Direction } from '../types'
 
+const LRI = '\u2066'
 const RLI = '\u2067'
 const PDI = '\u2069'
 const RLM = '\u200F'
@@ -29,7 +30,15 @@ const NOT_PROSE = /`[^`]*`|\]\([^)]*\)|https?:\/\/\S+|<[^>]+>/g
 // still closes.
 const JOINING_PUNCTUATION =
   /(?<=[A-Za-z0-9\u00C0-\u024F\u0370-\u03FF\u0400-\u04FF\u0660-\u0669\u06F0-\u06F9])([:\u060C\u061B])(?=(?:\*{1,2}|_{1,2})?\s)/g
-const CODE_SPAN = /(`[^`]*`)/
+// A number a reader takes as one left-to-right unit, which the bidi
+// algorithm splits in RTL text: a signed number ("-5" draws as "5-") and a
+// phone number in spaced groups ("+98 912 123 4567" draws reversed). Each
+// goes in a left-to-right isolate.
+const NUMBER_UNIT =
+  /(?<=^|[\s(])(?:\+[0-9\u0660-\u0669\u06F0-\u06F9]{1,4}(?:[ -][0-9\u0660-\u0669\u06F0-\u06F9]{1,5})+|[0-9\u0660-\u0669\u06F0-\u06F9]{2,}(?: [0-9\u0660-\u0669\u06F0-\u06F9]{2,}){2,}|[-+\u2212][0-9\u0660-\u0669\u06F0-\u06F9]+(?:[.,\u066B][0-9\u0660-\u0669\u06F0-\u06F9]+)*%?)/g
+
+// What a fix never reaches into: code spans, link targets and URLs.
+const PROTECTED = /(`[^`]*`|\]\([^)]*\)|https?:\/\/\S+)/
 
 const FENCE = /^[ \t]*(`{3,}|~{3,})/
 const QUOTE = /^[ \t]*>[ \t]?/
@@ -106,13 +115,21 @@ function splitPrefix(line: string): [string, string] {
 }
 
 /**
- * Puts an RLM after each colon or Arabic comma that ends an English word or a
- * number, outside code spans (the split leaves them at odd indexes).
+ * Keeps English and number runs where a reader expects them: an RLM after a
+ * colon or Arabic comma that ends an English word or a number, and signed or
+ * phone numbers in a left-to-right isolate. Protected parts (code spans, link
+ * targets, URLs) land at odd indexes of the split and are left alone.
  */
 function separateRuns(text: string): string {
   return text
-    .split(CODE_SPAN)
-    .map((part, at) => (at % 2 === 1 ? part : part.replace(JOINING_PUNCTUATION, `$1${RLM}`)))
+    .split(PROTECTED)
+    .map((part, at) =>
+      at % 2 === 1
+        ? part
+        : part
+            .replace(JOINING_PUNCTUATION, `$1${RLM}`)
+            .replace(NUMBER_UNIT, number => LRI + number + PDI),
+    )
     .join('')
 }
 

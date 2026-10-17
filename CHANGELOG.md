@@ -4,6 +4,18 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.1.4] - 2026-10-17
+
+### Fixed
+
+- Signed numbers in RTL text no longer flip: "-5" used to draw as "5-". They
+  now sit in a left-to-right isolate (U+2066 … U+2069), with Persian and
+  Arabic digits too.
+- Phone numbers in spaced groups ("+98 912 123 4567", "0912 123 4567") no
+  longer come out with their groups reversed.
+- Code spans, link targets and URLs are never changed by these fixes; ranges
+  ("5-10"), dates and plain numbers are left as they are.
+
 ## [0.1.3] - 2026-10-17
 
 ### Added
@@ -49,6 +61,7 @@ All notable changes to this project are documented here. The format follows
 - `/rtl`, `/rtl on` and `/rtl off` to toggle the display; the choice is kept
   across sessions.
 
+[0.1.4]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.4
 [0.1.3]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.3
 [0.1.2]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.2
 [0.1.1]: https://github.com/smhosseini72/claude-code-rtl/releases/tag/v0.1.1

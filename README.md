@@ -113,7 +113,7 @@ flowchart LR
 ```
 
 1. Before a message is drawn, the plugin looks at each line. A line with Persian, Arabic or Hebrew letters is right-to-left when its first or last letter is RTL, when at least half its words are RTL, or when it uses Persian/Arabic digits or punctuation (`۱۲۳`, `،`, `؟`). So a sentence like "PR ۱: merge شد" counts too, even though it opens in English. Code spans, URLs and link targets don't count.
-2. For an RTL line it inserts one invisible Unicode character, **RIGHT-TO-LEFT ISOLATE (U+2067)**, just after any markdown markers (`#`, `-`, `1.`, `>`, `[x]`). After a colon or Persian comma that ends an English word it adds a **RIGHT-TO-LEFT MARK (U+200F)**, so "PR ۱:" and "merge" stay two separate pieces instead of fusing into one English run.
+2. For an RTL line it inserts one invisible Unicode character, **RIGHT-TO-LEFT ISOLATE (U+2067)**, just after any markdown markers (`#`, `-`, `1.`, `>`, `[x]`). After a colon or Persian comma that ends an English word it adds a **RIGHT-TO-LEFT MARK (U+200F)**, so "PR ۱:" and "merge" stay two separate pieces instead of fusing into one English run. Signed numbers (`-5`, `+2.5%`) and phone numbers in spaced groups (`+98 912 123 4567`) go in a **LEFT-TO-RIGHT ISOLATE (U+2066 … U+2069)**, so they don't come out as "5-" or with their groups reversed.
 3. The renderer then orders that paragraph right-to-left, so punctuation, English words and numbers land where a reader expects.
 
 Fenced code blocks are skipped, and lines that already start with a bidi mark are left as written. The source is short and readable: [`hooks/bidi.ts`](https://github.com/smhosseini72/claude-code-rtl/blob/main/hooks/bidi.ts) and [`hooks/register.ts`](https://github.com/smhosseini72/claude-code-rtl/blob/main/hooks/register.ts).
@@ -131,6 +131,7 @@ A **mod** is a plugin that ships a small TypeScript module which Claude Code run
 - **Alignment:** RTL lines are ordered correctly but stay left-aligned. Mods draw with Claude Code's own elements, which don't take CSS such as `text-align` or `dir`.
 - **Fonts and font size:** a mod can't change them. In the desktop app, use zoom: <kbd>Cmd</kbd>/<kbd>Ctrl</kbd> + <kbd>=</kbd> / <kbd>-</kbd>.
 - **Tables:** columns stay in left-to-right order. The text inside each cell is fixed.
+- **Code blocks:** never touched, Persian comments included. Copied code must stay free of invisible characters: Rust refuses bidi characters in comments and GCC warns about them (the "Trojan Source" defense).
 - **Terminal:** left alone, see above.
 
 ## FAQ

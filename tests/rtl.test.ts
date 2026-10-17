@@ -2,6 +2,7 @@ import { describe, expect, test } from 'claude-code/testing'
 
 import { isRtl, markRtlMarkdown, markRtlPlain } from '../hooks/bidi'
 
+const LRI = '\u2066'
 const RLI = '\u2067'
 const PDI = '\u2069'
 const RLM = '\u200F'
@@ -73,6 +74,31 @@ describe('markRtlMarkdown around colons and commas', () => {
     expect(markRtlMarkdown('ساعت 10:30 شروع میشه')).toBe(`${RLI}ساعت 10:30 شروع میشه`)
     expect(markRtlMarkdown('لینک https://example.com رو باز کن')).toBe(`${RLI}لینک https://example.com رو باز کن`)
     expect(markRtlMarkdown('Note: hello world')).toBe('Note: hello world')
+  })
+})
+
+describe('markRtlMarkdown around numbers', () => {
+  test('keeps a signed number in one piece', () => {
+    expect(markRtlMarkdown('دمای امروز -5 درجه است.')).toBe(`${RLI}دمای امروز ${LRI}-5${PDI} درجه است.`)
+    expect(markRtlMarkdown('دمای امروز -۵ درجه است.')).toBe(`${RLI}دمای امروز ${LRI}-۵${PDI} درجه است.`)
+    expect(markRtlMarkdown('تغییر -2.5% بود')).toBe(`${RLI}تغییر ${LRI}-2.5%${PDI} بود`)
+  })
+
+  test('keeps a phone number in spaced groups in one piece', () => {
+    expect(markRtlMarkdown('شماره +98 912 123 4567 هست')).toBe(`${RLI}شماره ${LRI}+98 912 123 4567${PDI} هست`)
+    expect(markRtlMarkdown('شماره 0912 123 4567 هست')).toBe(`${RLI}شماره ${LRI}0912 123 4567${PDI} هست`)
+  })
+
+  test('leaves ranges, dates, plain numbers, code and URLs alone', () => {
+    expect(markRtlMarkdown('بین 5-10 روز طول می‌کشه')).toBe(`${RLI}بین 5-10 روز طول می‌کشه`)
+    expect(markRtlMarkdown('تاریخ 2026-10-17 بود')).toBe(`${RLI}تاریخ 2026-10-17 بود`)
+    expect(markRtlMarkdown('سال 1404 و 2025')).toBe(`${RLI}سال 1404 و 2025`)
+    expect(markRtlMarkdown('مقدار `-5` رو بذار')).toBe(`${RLI}مقدار \`-5\` رو بذار`)
+    expect(markRtlMarkdown('لینک https://x.com/a?n=-5 رو ببین')).toBe(`${RLI}لینک https://x.com/a?n=-5 رو ببین`)
+  })
+
+  test('keeps the full stop after a number outside the isolate', () => {
+    expect(markRtlMarkdown('دما -5.')).toBe(`${RLI}دما ${LRI}-5${PDI}.`)
   })
 })
 
